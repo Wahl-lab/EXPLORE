@@ -193,7 +193,7 @@ python main_quadrant.py
 \
 &nbsp;
 
-:exclamation: **Please refer to our publication for further information about more technical details: currently under review!**
+:exclamation: **Please refer to our publication for further information about more technical details: (https://www.nature.com/articles/s41598-023-31094-w)**
 
 \
 &nbsp;
