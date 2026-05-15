@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write   # needed to create GitHub releases
-  id-token: write   # needed for PyPI trusted publishing
 
 jobs:
   # --------------------------------------------------------------------------
@@ -35,27 +34,6 @@ jobs:
         with:
           name: dist
           path: dist/
-
-  # --------------------------------------------------------------------------
-  # Publish to PyPI via OIDC trusted publishing
-  # --------------------------------------------------------------------------
-  publish-pypi:
-    name: Publish to PyPI
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/explore
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        # No API token needed — uses OIDC trusted publishing.
-        # Configure on https://pypi.org/manage/project/explore/settings/publishing/
 
   # --------------------------------------------------------------------------
   # Create a GitHub release with the built artifacts
