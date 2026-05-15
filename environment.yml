@@ -1,0 +1,34 @@
+name: explore
+channels:
+  - pytorch          # official PyTorch channel
+  - conda-forge      # most up-to-date scientific packages
+  - defaults
+
+dependencies:
+  - python=3.11
+
+  # ---- OpenCV (binary wheels from conda-forge are the most reliable) ----
+  - conda-forge::opencv>=4.8
+
+  # ---- Core scientific stack --------------------------------------------
+  - conda-forge::numpy>=1.26
+  - conda-forge::pandas>=2.1
+  - conda-forge::scikit-learn>=1.4
+  - conda-forge::pillow>=10.1
+  - conda-forge::matplotlib>=3.8
+  - conda-forge::seaborn>=0.13
+  - conda-forge::pyyaml>=6.0
+
+  # ---- Misc Python tools ------------------------------------------------
+  - conda-forge::tqdm>=4.66
+  - conda-forge::joblib>=1.3
+  - conda-forge::click>=8.1
+
+  # ---- Everything else via pip (not on conda-forge) ---------------------
+  - pip
+  - pip:
+    - torch>=2.4           # conda pytorch channel lags; pip wheel handles MPS + NumPy 2 correctly
+    - torchvision>=0.19
+    - open-clip-torch>=2.24
+    - transformers>=4.46   # requires torch>=2.4
+    - -e ".[dev]"          # installs explore itself in editable mode

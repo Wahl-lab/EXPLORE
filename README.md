@@ -1,203 +1,150 @@
-# EXPLORE: A novel deep learning-based analysis method for exploration behaviour in object recognition tests
+<p align="center">
+  <img src="https://raw.githubusercontent.com/victorjonathanibanez/EXPLORE/main/src/explore/assets/explore_logo_writing.png" alt="EXPLORE" height="270">
+</p>
 
-![](EXPLORE.gif)
+**Automated exploration behavior analysis for object recognition and location tests**  
+*CLIP-based classification with an iterative labeling loop — no GPU required.*
 
-## :mortar_board: _About:_
-Object recognition tests are widely used in neuroscience to assess memory function in rodents. Despite the experimental simplicity of the task, the interpretation of behavioural features that are counted as object exploration can be complicated. Traditionally, analysis of object exploration thus is often based on manually scoring, which is  time-consuming, limited to few behaviours, and variable across researchers. To overcome these limitations We developed "EXLORE", a simple, ready-to use and open source pipeline. Compared to costly commercial software, EXPLORE performs the different analysis steps for object recognition tests with  higher precision, higher versatility and lower time investment. EXPLORE consists of a convolutional neural network trained in a supervised manner, that extracts features from images and classifies behavior of rodents near a presented object as “exploration” or “no exploration". EXPLORE achieves human-level accuracy in identifying and scoring exploration behaviour and outperforms commercial software, in particular under complex conditions, e.g., when multiple objects or larger objects to climb on are present. By labeling the respective training data set, users decide by themselves, which types of interactions are in- or excluded for scoring exploration behaviour. A GUI provides a beginning-to-end analysis with an automatic stop-watch function to calculate the duration of specific exploration behaviour, accelerating a fast and reproducible data analysis for neuroscientists with no expertise in programming or deep learning.
+[![CI](https://github.com/victorjonathanibanez/EXPLORE/actions/workflows/ci.yml/badge.svg)](https://github.com/victorjonathanibanez/EXPLORE/actions)
+[![PyPI](https://img.shields.io/pypi/v/explore-behavior)](https://pypi.org/project/explore-behavior/)
+[![Python](https://img.shields.io/pypi/pyversions/explore-behavior)](https://pypi.org/project/explore-behavior/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## :hammer: _Install EXPLORE:_
+---
 
-- First install Anaconda (if not installed already): [Install now](https://docs.anaconda.com/anaconda/install/index.html)
-- Clone this repository and store the folder *EXPLORE-main* at a preferred directory (first, you find it in your *download* folder)
-- Open a shell- or a terminal window and change the directory (the easiest way is to drag & drop your folder into the shell- or terminal window after typing *cd* and a *space*):
-```sh
-cd <your directory>/EXPLORE-main
-```
-- create and activate your environment:
-```sh
-conda create -n XPL
-conda activate XPL
-```
-- Run the *requirements.txt* file (this will install all the necessary packages for EXPLORE into your new conda environment (could take a few minutes!)):
-```sh
-conda install -c conda-forge --file requirements.txt
-```
-- install OpenCV with the following command on **macOS**:
-```sh
-pip install opencv-python==4.1.1.26
-```
-(use **pip3** for macOS earlier than *BigSur*)
+## Overview
 
-- or install OpenCV with the following command on **Windows**:
+EXPLORE analyzes rodent object exploration from overhead video recordings.
+It uses CLIP (ViT-B/32) to classify frames and a lightweight logistic-regression
+head that you train interactively in a few minutes.
 
-```sh
-conda install -c conda-forge opencv==4.5.0
-```
+**Core workflow (browser GUI):**
 
-\
-&nbsp;
+1. Add videos and name your project
+2. Draw bounding boxes around each object on a reference frame
+3. Verify that boxes are correctly re-localized across all videos
+4. Sample 1-minute windows, correct proximity-based labels, train the classifier
+5. Run the full analysis — annotated videos, exploration CSVs, trajectory plots
 
-:fire: **Congratulations, you have now successfully installed EXPLORE! Now let's use it...** :fire:
-  
-\
-&nbsp;
-  
-## :bulb: _How to use EXPLOREs deep learning-based exploration analysis:_
+---
 
-EXPLOREs deep learning-based exploration analysis is the major part to investigate object recognition tests. There are three parts: 1. Training a network on a few manually scored samples. 2. Predict on all of your experiment videos. 3. Correct your prediction if necessary. The main measures taken are *exploration time* and *exploration frequency* on each defined object. 
-:exclamation:Note: For acquisition session and testing session two distinct networks have to be trained.
+## Installation
 
-### Overview on method:
-![](https://github.com/victorjonathanibanez/EXPLORE/blob/main/overview_dl.jpg)
+```bash
+# 1. Install PyTorch (CPU)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
-\
-&nbsp;
-
-Open a shell- or a terminal window and change to your directory:
-```sh
-cd <your directory>/EXPLORE-main/scripts
+# 2. Install EXPLORE
+pip install explore-behavior
 ```
 
-Activate your virtual environment:
-```sh
-conda activate XPL
+For GPU (CUDA 12):
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install explore-behavior
 ```
 
-### Training:
-  
-To train a network enter the following command:
-```sh
-python main_training.py
-```
-(**python3** for macOS)
+---
 
-\
-&nbsp;
+## Quick start
 
-**:arrow_right: This will now open a GUI (see [manual training1](https://github.com/victorjonathanibanez/EXPLORE/blob/main/manuals/Manual_training1.jpg) and [manual training2](https://github.com/victorjonathanibanez/EXPLORE/blob/main/manuals/Manual_training2.jpg) and [manual scoring](https://github.com/victorjonathanibanez/EXPLORE/blob/main/manuals/Manual_scoring.jpg) for further instructions!)** 
-  
-\
-&nbsp;
+### GUI (recommended)
 
-### Prediction:
-  
-To predict on your experiment videos enter the following command:
-```sh
-python main_prediction.py
-```
-(**python3** for macOS)
-
-\
-&nbsp;
-
-**:arrow_right: This will now open a GUI (see [manual prediction](https://github.com/victorjonathanibanez/EXPLORE/blob/main/manuals/Manual_prediction.jpg) for further instructions!)** 
-
-\
-&nbsp;
-
-### Correction:
-  
-To correct your prediction enter the following command:
-```sh
-python main_correct.py
-```
-(**python3** for macOS)
-
-\
-&nbsp;
-
-**:arrow_right: This will now open a GUI (see [manual correction](https://github.com/victorjonathanibanez/EXPLORE/blob/main/manuals/Manual_correction.jpg) for further instructions!)** 
-
-\
-&nbsp;
-
-| Output files | Type | Description | 
-| ------ | ------ | ------ |
-| Prediction videos | folder | For all of the selected experiment videos EXPLORE will generate colored squares around the objects whenever exploration behaviour was predicted and stores the newly created videos in a folder *prediction videos*|
-| Dataframe | .csv | The predicted exploration times and frequencies at each object will be stored in a dataframe |
-| Plots | .png | Training- and validation accuracy- and loss will be plotted and saved |
-  
-\
-&nbsp;
-
-## :bulb: _How to use EXPLOREs manual labeling tool:_
-Besides the automated analysis, EXPLORE provides a tool for manual scoring. The scoring will be saved as .csv file.
-
-Open a shell- or a terminal window and change to your directory:
-```sh
-cd <your directory>/EXPLORE-main/scripts
+```bash
+explore gui
 ```
 
-Activate your virtual environment:
-```sh
-conda activate XPL
+The browser app opens automatically. Work through the six tabs in order:
+
+| Tab | What you do |
+|-----|-------------|
+| **1. Project** | Enter a project name, choose an output folder, add video files |
+| **2. Label Objects** | Get a reference frame from any video; draw a bounding box around each object and name it |
+| **3. Verify Boxes** | ORB feature matching re-localizes boxes across all other videos; drag any box to correct it |
+| **4. Label Frames** | Sample 1-minute windows → proximity labels applied automatically → correct wrong labels → *Train + Preview* to fit the classifier and preview the next window with model predictions. Repeat until labels look right. |
+| **5. Analyze** | Set min bout duration; toggle DI/RI (computed for every object pair); choose low-res (fast) or high-res prediction video; click **Run** |
+| **6. Results** | Browse the results table; output files are in your project folder |
+
+Session state is saved automatically at each step — use **Load project** on Tab 1
+to resume from where you left off.
+
+
+---
+
+## Output files
+
+| File | Description |
+|------|-------------|
+| `results/<project>.csv` | Tidy per-animal, per-minute table: exploration time, frequency, DI and RI for every object pair |
+| `results/prediction_videos/*.mp4` | Annotated video at 12 fps / half resolution (low-res mode) with coloured overlays at exploration moments |
+| `results/tracking/<video>_tracking.csv` | Animal centroid (x, y) per analysis frame |
+| `results/tracking/<video>_trajectory.png` | Trajectory plot colour-coded by time with object boxes overlaid |
+| `model/head.pkl` | Fitted logistic-regression head (~5 kB, shareable across experiments) |
+| `session.json` | Full project state — reopen any session with *Load project* in the GUI |
+| `config.yaml` | Experiment configuration including behavioral prompts |
+
+### DI and RI
+
+Discrimination Index and Recognition Index are computed for **every pair** of
+objects when *Compute DI / RI* is enabled. With objects `A` and `B`:
+
+```
+DI_A_vs_B = (t_A − t_B) / (t_A + t_B)
+RI_A_vs_B = t_A / (t_A + t_B)
 ```
 
-To start manual scoring type the following command:
-```sh
-python main_manual_scoring.py
-```
-(**python3** for macOS)
+Values are based on total session exploration time (not per-bin), which avoids
+instability from empty time bins.
 
-\
-&nbsp;
+---
 
-**:arrow_right: This will now open a GUI (refer to the training manual for further instructions!)** 
 
-\
-&nbsp;
+## Development
 
-## :bulb: _How to use EXPLOREs quadrant analysis:_
+```bash
+git clone https://github.com/victorjonathanibanez/EXPLORE
+cd EXPLORE
 
-With the quadrant analysis you can investigate and quantify movement throughout the experiment arena. Two measures are taken: the time animals spent in each quadrant over a given period (*exploration time*) and the frequency of transistions from one quadrant to another (*exploration frequency*).
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+pip install -e ".[dev]"
 
-### Overview on method:
-![](https://github.com/victorjonathanibanez/EXPLORE/blob/main/overview_quadrant.jpg)
+# Run tests (no GPU, no model download)
+pytest -m "not slow and not gpu"
 
-\
-&nbsp;
-
-Open a shell- or a terminal window and change to your directory:
-```sh
-cd <your directory>/EXPLORE-main/scripts
+# Lint + format
+ruff check src/ tests/
+ruff format src/ tests/
 ```
 
-Activate your virtual environment:
-```sh
-conda activate XPL
-```
+---
 
-Then enter the following command:
-```sh
-python main_quadrant.py
-```
-(**python3** for macOS)
+## Contributing
 
-\
-&nbsp;
+Pull requests welcome. Areas where contributions are most valuable:
 
-**:arrow_right: This will now open a GUI (see [manual quadrant](https://github.com/victorjonathanibanez/EXPLORE/blob/main/manuals/Manual_quadrant.jpg) for further instructions!)** 
+- Pose estimation integration for more robust tracking
+- Better object assignment when multiple objects are very close together
+- Windows-specific testing
 
-\
-&nbsp;
+Please open an issue before submitting large changes.
 
-| Output files | Type | Description | 
-| ------ | ------ | ------ |
-| Dataframe | .csv | The predicted exploration times and frequencies for each quadrant will be stored in a dataframe |
-| Plots | .png | For each animal (video) the frequency will be plotted and stored |
-| Heatmap | .png | An overview on the quadrants exploration- frequency and time will be plotted as heatmaps |
+---
 
-\
-&nbsp;
+## License
 
-\
-&nbsp;
+MIT — see [LICENSE](LICENSE).
 
-:exclamation: **Please refer to our publication for further information about more technical details: https://www.nature.com/articles/s41598-023-31094-w**
+---
 
-\
-&nbsp;
+## Citation
 
-## :mailbox: _Contact:_
-victor.ibanez@uzh.ch\
-wahl@hifo.uzh.ch
+If you use EXPLORE in your research, please cite:
+
+> Ibañez, V., Bohlen, L., Manuella, F. et al. EXPLORE: a novel deep learning-based analysis method for exploration behaviour in object recognition tests. Sci Rep 13, 4249 (2023). https://doi.org/10.1038/s41598-023-31094-w
+
+---
+
+## Contact
+
+**Victor Ibañez** — victor.ibanez@uzh.ch  
+**Anna-Sophia Wahl** — AnnaSophia.Wahl@med.uni-muenchen.de  
