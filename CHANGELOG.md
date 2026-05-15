@@ -63,6 +63,4 @@ Complete rewrite. The package is now a fully installable Python library
 
 Initial public release accompanying the *Scientific Reports* publication.
 
-> Ibañez V.J., Wahl C., et al. (2023). *EXPLORE: an open-source analysis
-> tool for object exploration behavior.* Scientific Reports.
-> <https://www.nature.com/articles/s41598-023-31094-w>
+> Ibañez, V., Bohlen, L., Manuella, F. et al. EXPLORE: a novel deep learning-based analysis method for exploration behaviour in object recognition tests. Sci Rep 13, 4249 (2023). https://doi.org/10.1038/s41598-023-31094-w
