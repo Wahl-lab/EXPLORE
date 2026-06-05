@@ -30,17 +30,38 @@ head that you train interactively in a few minutes.
 
 ## Installation
 
-```bash
-# 1. Install PyTorch (CPU)
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+> **Do not install EXPLORE into your base conda environment.**
+> Always create a dedicated environment first.
 
-# 2. Install EXPLORE
-pip install explore-behavior
+### 1. Create and activate a new environment
+
+With **mamba** (recommended — faster):
+```bash
+mamba create -n explore python=3.11
+mamba activate explore
 ```
 
-For GPU (CUDA 12):
+Or with **conda**:
+```bash
+conda create -n explore python=3.11
+conda activate explore
+```
+
+### 2. Install PyTorch
+
+CPU only:
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+```
+
+GPU (CUDA 12):
 ```bash
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+```
+
+### 3. Install EXPLORE
+
+```bash
 pip install explore-behavior
 ```
 
@@ -102,6 +123,9 @@ instability from empty time bins.
 ## Development
 
 ```bash
+mamba create -n explore-dev python=3.11
+mamba activate explore-dev
+
 git clone https://github.com/victorjonathanibanez/EXPLORE
 cd EXPLORE
 
