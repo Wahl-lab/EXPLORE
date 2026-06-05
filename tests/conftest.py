@@ -113,6 +113,9 @@ def mock_clip_classifier(random_embeddings):
     clf._tokenizer = None
     clf._head = None
 
+    # Prevent _ensure_loaded from triggering open_clip download
+    clf._ensure_loaded = MagicMock()
+
     # Stub embed_frames to return pre-computed embeddings
     clf.embed_frames = MagicMock(return_value=random_embeddings)
 
